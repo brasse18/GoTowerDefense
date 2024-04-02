@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"time"
-	"goTowerDefens/objekts"
+	"GoTowerDefense/objekts"
 )
 
 func main() {
