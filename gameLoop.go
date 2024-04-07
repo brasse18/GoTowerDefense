@@ -62,13 +62,13 @@ func inputLoop(ticker *time.Ticker, player *objekts.Player) {
 			ticker.Stop()
 			return
 		case 'w':
-			player.AMove(-10,0)
+			player.AMove(-(256/8),0)
 		case 's':
-			player.AMove(10,0)
+			player.AMove((256/8),0)
 		case 'd':
-			player.AMove(0,10)
+			player.AMove(0,(256/8))
 		case 'a':
-			player.AMove(0,-10)
+			player.AMove(0,-(256/8))
 		}
 	
 	}
@@ -78,10 +78,10 @@ func loop(ticker *time.Ticker, gWorld *GameWorld) {
 	setup()
 	
 	for range ticker.C{
-		CallClear()
+		//CallClear()
 		for _, entatyPtr := range gWorld.Entatys {
             if entatyPtr != nil {
-                fmt.Println(*entatyPtr) // Använd *entatyPtr för att skriva ut det pekaren pekar på
+                //fmt.Println(*entatyPtr) // Använd *entatyPtr för att skriva ut det pekaren pekar på
             }
         }
 		//fmt.Println("Tick ")
