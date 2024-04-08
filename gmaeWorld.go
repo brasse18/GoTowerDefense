@@ -25,12 +25,12 @@ func RelativeCrop(source *ebiten.Image, r image.Rectangle) *ebiten.Image {
     return source.SubImage(image.Rect(rx, ry, rx+r.Max.X, ry+r.Max.Y)).(*ebiten.Image)
 }
 
-func (gWorld *GameWorld) loadeImages(vec [5][5]vector.Vector) {
+func (gWorld *GameWorld) loadeImages(vec [5][5]vector.Vector, scale int) {
 	for i := 0; i < 5; i++ {
 		for j := 0; j < 5; j++ {
 			gWorld.op[i][j] = &ebiten.DrawImageOptions{}
-			gWorld.op[i][j].GeoM.Scale(1, 1)
-			gWorld.op[i][j].GeoM.Translate(gWorld.Size.X()*float64(i), gWorld.Size.Y()*float64((j)))
+			gWorld.op[i][j].GeoM.Scale(float64(scale), float64(scale))
+			gWorld.op[i][j].GeoM.Translate(gWorld.Size.X()*float64(i*scale), gWorld.Size.Y()*float64((j*scale)))
 			//fix sönder
 			//var rec = image.Rect(int(vec[i][j].X()*50), int(vec[i][j].Y()*50), 50, 50)
 			//fungerar ej
