@@ -13,7 +13,23 @@ import (
 )
 
 var img *ebiten.Image
-
+var spritMap = map[string]Vec{
+	"landL":        Vec{0,1},
+	"landR":        Vec{2,1},
+	"landU":        Vec{1,0},
+	"landD":        Vec{1,3},
+	"land":        	Vec{3,0},
+    "landGrass":   	Vec{4,0},
+	"Sine": 		Vec{5,0},
+    "watter": 		Vec{1,1},
+	"houseL":       Vec{1,3},
+	"houseR":       Vec{1,4},
+	"path|":       	Vec{2,3},
+	"path-":       	Vec{2,4},
+	"path-endR":    Vec{2,5},
+	"path-endL":    Vec{1,5},
+    
+}
 type Vec = vector.Vector
 
 func init() {
@@ -51,11 +67,11 @@ func (g *Game) Draw(screen *ebiten.Image) {
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	return 320, 320
+	return 640,640
 }
 
 func runGui(gWorld *GameWorld) {
-	ebiten.SetWindowSize(640, 480)
+	ebiten.SetWindowSize(640, 640)
 	ebiten.SetWindowTitle("Hello, World!")
 	if err := ebiten.RunGame(&Game{GWorld: gWorld}); err != nil {
 		log.Fatal(err)
@@ -63,10 +79,6 @@ func runGui(gWorld *GameWorld) {
 }
 
 func main() {
-	//watter := Vec{1,1}
-	land := Vec{3,0}
-	beashL := Vec{2,1}
-	//landGrass := Vec{4,0}
 	//test := objekts.Vektor{X: 0,Y: 0}
 	//player := new(objekts.Player)
 	player := objekts.NewPlayer(0,0,10,10,"brasse")
@@ -87,9 +99,17 @@ func main() {
 	//tempMapVektor[0][1] = Vec{0,1}
 
 	for i := 0;i < 5; i++ {
-		tempMapVektor[0][i] = beashL
-		for j := 1;j < 5; j++ {
-			tempMapVektor[j][i] = land
+		for j := 0;j < 5; j++ {
+			switch j {
+			case 0:
+				tempMapVektor[j][i] = spritMap["landR"]
+			case 3:
+				tempMapVektor[j][i] = spritMap["path-endR"]
+			case 4:
+				tempMapVektor[j][i] = spritMap["land"]
+			default:
+				tempMapVektor[j][i] = spritMap["path-"]
+			}
 		}
 	}
 	
