@@ -1,28 +1,29 @@
 package main
 
 import (
-	"image"
 	"GoTowerDefense/objekts"
+	"image"
+
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/quartercastle/vector"
 )
 
 type GameWorld struct {
 	MapSprit *ebiten.Image
-	Size *vector.Vector
-	op [5][5]*ebiten.DrawImageOptions
+	Size     *vector.Vector
+	op       [5][5]*ebiten.DrawImageOptions
 	ImageMap [5][15]*ebiten.Image
-	Entatys [10]*objekts.Entaty
+	Entatys  []*objekts.Entaty
 }
 
 func (gWorld *GameWorld) addEntaty(inEntaty *objekts.Entaty) {
-	//gWorld.Entatys = append(gWorld.Entatys, inEntaty)
-	gWorld.Entatys[0] = inEntaty
+	gWorld.Entatys = append(gWorld.Entatys, inEntaty)
+	//gWorld.Entatys[0] = inEntaty
 }
 
 func RelativeCrop(source *ebiten.Image, r image.Rectangle) *ebiten.Image {
-    rx, ry := source.Bounds().Min.X+r.Min.X, source.Bounds().Min.Y+r.Min.Y
-    return source.SubImage(image.Rect(rx, ry, rx+r.Max.X, ry+r.Max.Y)).(*ebiten.Image)
+	rx, ry := source.Bounds().Min.X+r.Min.X, source.Bounds().Min.Y+r.Min.Y
+	return source.SubImage(image.Rect(rx, ry, rx+r.Max.X, ry+r.Max.Y)).(*ebiten.Image)
 }
 
 func (gWorld *GameWorld) loadeImages(vec [5][5]vector.Vector, scale int) {
@@ -42,7 +43,7 @@ func (gWorld *GameWorld) loadeImages(vec [5][5]vector.Vector, scale int) {
 			gWorld.ImageMap[i][j] = gWorld.MapSprit.SubImage(image.Rect(sx, sy, sx+int(gWorld.Size.X()), sy+int(gWorld.Size.Y()))).(*ebiten.Image)
 			//gWorld.ImageMap[i][j] = RelativeCrop(gWorld.MapSprit, rec)
 		}
-	 }	
+	}
 }
 
 func (gWorld *GameWorld) DrawMap(screen *ebiten.Image) {
@@ -50,15 +51,22 @@ func (gWorld *GameWorld) DrawMap(screen *ebiten.Image) {
 		for j := 0; j < 5; j++ {
 			screen.DrawImage(gWorld.ImageMap[i][j], gWorld.op[i][j])
 		}
-	 }
+	}
 }
 
 func (gWorld *GameWorld) DrawEntaty(screen *ebiten.Image) {
-	screen.DrawImage(gWorld.Entatys[0].Sprit, gWorld.Entatys[0].ImageOption)
+	for _, entaty := range gWorld.Entatys {
+		screen.DrawImage(entaty.Sprit, entaty.ImageOption)
+	}
+	//screen.DrawImage(gWorld.Entatys[0].Sprit, gWorld.Entatys[0].ImageOption)
+	//screen.DrawImage(gWorld.Entatys[1].Sprit, gWorld.Entatys[1].ImageOption)
+	//if gWorld.Entatys[1] != nil {
+	//	screen.DrawImage(gWorld.Entatys[1].Sprit, gWorld.Entatys[1].ImageOption)
+	//}
 }
 
 func NewGameWorld() *GameWorld {
-	
-	return &GameWorld{Entatys: [10]*objekts.Entaty{}}
+
+	return &GameWorld{Entatys: []*objekts.Entaty{}}
 
 }

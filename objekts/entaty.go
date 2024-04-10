@@ -1,8 +1,9 @@
 package objekts
 
 import (
-	"github.com/hajimehoshi/ebiten/v2"
 	"fmt"
+
+	"github.com/hajimehoshi/ebiten/v2"
 )
 
 type Vektor struct {
@@ -11,9 +12,9 @@ type Vektor struct {
 }
 
 type Entaty struct {
-	Posison Vektor
-	size Vektor
-	Sprit *ebiten.Image
+	Posison     Vektor
+	Size        Vektor
+	Sprit       *ebiten.Image
 	ImageOption *ebiten.DrawImageOptions
 }
 

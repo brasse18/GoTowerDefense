@@ -1,12 +1,13 @@
 package main
 
 import (
-	"fmt"
-	"time"
 	"GoTowerDefense/objekts"
-	"log"
-	_ "image/png"
+	"fmt"
 	"image"
+	_ "image/png"
+	"log"
+	"time"
+
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/quartercastle/vector"
@@ -14,22 +15,22 @@ import (
 
 var img *ebiten.Image
 var spritMap = map[string]Vec{
-	"landL":        Vec{0,1},
-	"landR":        Vec{2,1},
-	"landU":        Vec{1,0},
-	"landD":        Vec{1,3},
-	"land":        	Vec{3,0},
-    "landGrass":   	Vec{4,0},
-	"Sine": 		Vec{5,0},
-    "watter": 		Vec{1,1},
-	"houseL":       Vec{1,3},
-	"houseR":       Vec{1,4},
-	"path|":       	Vec{2,3},
-	"path-":       	Vec{2,4},
-	"path-endR":    Vec{2,5},
-	"path-endL":    Vec{1,5},
-    
+	"landL":     {0, 1},
+	"landR":     {2, 1},
+	"landU":     {1, 0},
+	"landD":     {1, 3},
+	"land":      {3, 0},
+	"landGrass": {4, 0},
+	"Sine":      {5, 0},
+	"watter":    {1, 1},
+	"houseL":    {1, 3},
+	"houseR":    {1, 4},
+	"path|":     {2, 3},
+	"path-":     {2, 4},
+	"path-endR": {2, 5},
+	"path-endL": {1, 5},
 }
+
 type Vec = vector.Vector
 
 func init() {
@@ -51,7 +52,7 @@ func loadImageFromFile(pathToFile string) *ebiten.Image {
 	return tempImg
 }
 
-type Game struct{
+type Game struct {
 	GWorld *GameWorld
 }
 
@@ -67,7 +68,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	return 640,640
+	return 640, 640
 }
 
 func runGui(gWorld *GameWorld) {
@@ -81,25 +82,23 @@ func runGui(gWorld *GameWorld) {
 func main() {
 	//test := objekts.Vektor{X: 0,Y: 0}
 	//player := new(objekts.Player)
-	player := objekts.NewPlayer(0,0,10,10,"brasse")
+	player := objekts.NewPlayer(0, 0, 10, 10, "brasse")
 	gWorld := NewGameWorld()
 	gWorld.addEntaty(&player.PlayerEnataty)
 	gWorld.MapSprit = loadImageFromFile("image/map-tails.png")
-	
-	sx := 5 * (256/8)
-	sy := 0 * (256/8)
+	imageSize := objekts.Vektor{X: (256 / 8), Y: (256 / 8)}
+
+	sx := 5 * (256 / 8)
+	sy := 0 * (256 / 8)
 	gWorld.Entatys[0].Sprit = gWorld.MapSprit.SubImage(image.Rect(sx, sy, sx+(256/8), sy+(256/8))).(*ebiten.Image)
 	gWorld.Entatys[0].ImageOption = &ebiten.DrawImageOptions{}
 	gWorld.Entatys[0].ImageOption.GeoM.Scale(2, 2)
 	gWorld.Entatys[0].ImageOption.GeoM.Translate(0, 0)
-	gWorld.Size = &Vec{(256/8),(256/8)}
+	gWorld.Size = &Vec{(256 / 8), (256 / 8)}
 	tempMapVektor := [5][5]Vec{}
-	//tempMapVektor[1][1] = watter
-	//tempMapVektor[1][0] = Vec{1,0}
-	//tempMapVektor[0][1] = Vec{0,1}
 
-	for i := 0;i < 5; i++ {
-		for j := 0;j < 5; j++ {
+	for i := 0; i < 5; i++ {
+		for j := 0; j < 5; j++ {
 			switch j {
 			case 0:
 				tempMapVektor[j][i] = spritMap["landR"]
@@ -112,7 +111,25 @@ func main() {
 			}
 		}
 	}
-	
+	//i := 0
+	x := int(spritMap["houseR"].X() * float64(imageSize.X))
+	y := int(spritMap["houseR"].Y() * float64(imageSize.Y))
+	var px float64
+	var py float64
+	for i := 0; i < 5; i++ {
+		fmt.Print("test: ", i)
+		tempEntaty := &objekts.Entaty{}
+		tempEntaty.Posison = objekts.Vektor{X: i, Y: 1}
+		tempEntaty.Size = imageSize
+		tempEntaty.Sprit = gWorld.MapSprit.SubImage(image.Rect(x, y, x+imageSize.X, y+imageSize.Y)).(*ebiten.Image)
+		tempEntaty.ImageOption = &ebiten.DrawImageOptions{}
+		tempEntaty.ImageOption.GeoM.Scale(2, 2)
+		px = float64(2 * imageSize.Y)
+		py = float64((i * 2) * imageSize.Y)
+		tempEntaty.ImageOption.GeoM.Translate(px, py)
+		gWorld.addEntaty(tempEntaty)
+	}
+
 	gWorld.loadeImages(tempMapVektor, 2)
 	//fmt.Println(gWorld)
 	fmt.Println(gWorld.Entatys[0])
